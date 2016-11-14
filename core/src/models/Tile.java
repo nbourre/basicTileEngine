@@ -6,8 +6,11 @@ import com.badlogic.gdx.math.Rectangle;
 public final class Tile {
 	//static final int TILESIZE = 32;
 	static Texture tileSetTexture;
-	static int tileWidth = 48;
-	static int tileHeight = 48;
+	static int tileWidth = 33;
+	static int tileHeight = 27;
+	static int tileStepX = 52;
+	static int tileStepY = 14;
+	static int oddRowXOffset = 26;
 
 	public static int getTileWidth() {
 		return tileWidth;
