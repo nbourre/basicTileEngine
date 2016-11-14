@@ -10,7 +10,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -23,15 +22,13 @@ public class YATE extends ApplicationAdapter {
     int carreLargeur;
     int carreHauteur;
 
-
-
     @Override
     public void create () {
         batch = new SpriteBatch();
-        Tile.setTileSetTexture (new Texture("part1_tileset.png"));
+        Tile.setTileSetTexture (new Texture("part2_tileset.png"));
 
-        carreLargeur = Gdx.graphics.getWidth() / tileSize + 1;
-        carreHauteur = Gdx.graphics.getHeight() / tileSize + 2;
+        carreLargeur = Gdx.graphics.getWidth() / Tile.getTileWidth() + 1;
+        carreHauteur = Gdx.graphics.getHeight() / Tile.getTileHeight() + 2;
 
     }
 
@@ -79,14 +76,14 @@ public class YATE extends ApplicationAdapter {
         /**
          * Calculs pour le premier carr en haut  gauche
          */
-        Vector2 firstSquare = new Vector2(Camera.getLocation().x / (float)tileSize, Camera.getLocation().y / (float)tileSize);
+        Vector2 firstSquare = new Vector2(Camera.getLocation().x / (float)Tile.getTileWidth(), Camera.getLocation().y / (float)Tile.getTileHeight());
         int firstX = (int) firstSquare.x;
         int firstY = (int) firstSquare.y;
 
         /**
          * Calcul pour le dcalage pour la camera pour les cts
          */
-        Vector2 squareOffset = new Vector2(Camera.getLocation().x % tileSize, Camera.getLocation().y % tileSize);
+        Vector2 squareOffset = new Vector2(Camera.getLocation().x % Tile.getTileWidth(), Camera.getLocation().y % Tile.getTileHeight());
         int offsetX = (int)squareOffset.x;
         int offsetY = (int)squareOffset.y;
 
@@ -94,16 +91,21 @@ public class YATE extends ApplicationAdapter {
         batch.begin();
 
         for (int y = 0; y < carreHauteur; y++) {
-            int positionY = (y * tileSize) - offsetY;
+            int positionY = (y * Tile.getTileHeight()) - offsetY;
 
             for (int x = 0; x < carreLargeur; x++) {
-                // Va chercher le rectangle de la tuile  afficher
-                Rectangle srcRect = Tile.getSourceRectangle(map.getRow(y + firstY).getCell(x + firstX).getTileID());
 
-                batch.draw(Tile.getTileSetTexture(),
-                        (x * tileSize) - offsetX, positionY,
-                        (int)srcRect.x, (int)srcRect.y,
-                        (int)srcRect.width, (int)srcRect.height);
+                for (int tileId : map.getRow(y + firstY).getCell(x + firstX).getBaseTiles()) {
+
+                    // Va chercher le rectangle de la tuile à afficher
+                    Rectangle srcRect = Tile.getSourceRectangle(tileId);
+
+                    batch.draw(Tile.getTileSetTexture(),
+                            (x * Tile.getTileWidth()) - offsetX, positionY,
+                            (int)srcRect.x, (int)srcRect.y,
+                            (int)srcRect.width, (int)srcRect.height);
+                }
+
             }
         }
 

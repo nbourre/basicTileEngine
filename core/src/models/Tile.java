@@ -4,12 +4,37 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
 public final class Tile {
-	static final int TILESIZE = 32;
+	//static final int TILESIZE = 32;
 	static Texture tileSetTexture;
-	
+	static int tileWidth = 48;
+	static int tileHeight = 48;
+
+	public static int getTileWidth() {
+		return tileWidth;
+	}
+
+	public static void setTileWidth(int tileWidth) {
+		Tile.tileWidth = tileWidth;
+	}
+
+	public static int getTileHeight() {
+		return tileHeight;
+	}
+
+	public static void setTileHeight(int tileHeight) {
+		Tile.tileHeight = tileHeight;
+	}
+
+
+
 	public static Rectangle getSourceRectangle(int tileIndex) {
-		
-		return new Rectangle(tileIndex * TILESIZE, 0, TILESIZE, TILESIZE);
+		int tileY = tileIndex / (tileSetTexture.getWidth() / tileWidth);
+		int tileX = tileIndex % (tileSetTexture.getWidth() / tileWidth);
+
+		return new Rectangle(tileX * tileWidth, tileY * tileHeight, tileWidth, tileHeight);
+
+		/** Vieille itération */
+		//return new Rectangle(tileIndex * TILESIZE, 0, TILESIZE, TILESIZE);
 		
 	}
 
